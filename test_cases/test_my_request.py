@@ -7,6 +7,7 @@ from common.replace_variable import ReplaceVariable
 from common.context import Context
 from common.my_request import *
 from common.my_logging import *
+from common.read_cfg import *
 import logging
 
 
@@ -14,6 +15,8 @@ import logging
 class TestMyRequest(unittest.TestCase):
     do_excel = DoExcel(r"{0}\api_info.xlsx".format(testdatas_dir))
     all_case_data = do_excel.read_all_caseData()
+    #读取配置文件
+    test_host, sql_host = get_host_section()
 
     @ddt.data(*all_case_data)
     def test_my_request(self, case_data):
@@ -21,6 +24,12 @@ class TestMyRequest(unittest.TestCase):
 
         logging.info("用例『{0}』测试开始了".format(case_data["case_desc"][0]))
         for i in range(len(case_data["case_id"])):
+
+            #拼接url
+            if case_data["host"][i] == "test":
+                case_data["url"][i] = self.test_host + case_data["url"][i]
+            elif case_data["host"][i] == "sql":
+                case_data["url"][i] = self.sql_host + case_data["url"][i]
 
             #替换请求参数
             request_data = json.loads(ReplaceVariable.replace_variable(case_data["request_data"][i]))

@@ -5,6 +5,8 @@ from common.read_cfg import *
 class ReadMysql:
 
     def __init__(self):
+        #读取配置文件
+        host, port, db, user, password = get_mysql_options()
 
         #数据库连接
         try:

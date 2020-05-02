@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request
 from common.read_mysql import ReadMysql
 import json
 import decimal, datetime
